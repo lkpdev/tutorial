@@ -1,10 +1,7 @@
-provider "azurerm" {
-  features {}
-}
-
 resource "azurerm_resource_group" "tutorial" {
-  name     = "tutorial-resources"
-  location = "UK South"
+  name     = "${var.project}-${var.environment}-rg"
+  location = var.location
+  tags = local.tags
 }
 
 resource "azurerm_virtual_network" "tutorial" {
