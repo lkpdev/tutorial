@@ -1,19 +1,19 @@
-name: Terraform - tutorial
-
-trigger: none
-
-variables:
-  - group: Terraform_SPN
-  - name: rootFolder
-    value: 'terraform/'
-  - name: tfvarsFile
-    value: 'tutorial.tfvars'
-  - name: adoEnvironment
-    value: 'dev'
-
-stages:
-  - template: templates/terraform-template.yml
-    parameters:
-      rootFolder: $(rootFolder)
-      tfvarsFile: $(tfvarsFile)
-      adoEnvironment: $(adoEnvironment)
+#name: Terraform - tutorial
+#
+#trigger: none
+#
+#variables:
+#  - group: Terraform_SPN
+#  - name: rootFolder
+#    value: 'terraform/'
+#  - name: tfvarsFile
+#    value: 'tutorial.tfvars'
+#  - name: adoEnvironment
+#    value: 'dev'
+#
+#stages:
+#  - template: templates/terraform-template.yml
+#    parameters:
+#      rootFolder: $(rootFolder)
+#      tfvarsFile: $(tfvarsFile)
+#      adoEnvironment: $(adoEnvironment)
