@@ -5,7 +5,7 @@ provider "aws" {
 
 #-----------network module-----------------
 module "network" {
-  source       = "modules/network"
+  source       = "./modules/network"
   env          = var.env
   region       = var.region
   vpc_cidr     = var.vpc_cidr
@@ -14,7 +14,7 @@ module "network" {
 
 #-----------ec2 module-------------
 module "ec2" {
-  source = "modules/ec2"
+  source = "./modules/ec2"
   env    = var.env
   region = var.region
 
