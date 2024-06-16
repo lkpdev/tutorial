@@ -9,7 +9,7 @@ pipeline {
     stage('Install Checkov') {
       steps {
         script {
-          sh "sudo pip install checkov"
+          sh "pip install checkov"
           def checkovPath = sh(script: 'pip show checkov | grep "Location" | cut -d " " -f 2', returnStdout: true).trim()
           env.PATH = "${checkovPath}:${env.PATH}"
         }
@@ -31,8 +31,8 @@ pipeline {
         catchError(buildResult: 'SUCCESS') {
           script {
             try {
-              sh 'sudo mkdir -p reports'
-              sh 'sudo checkov -d . --output junitxml > reports/checkov-report.xml'
+              sh 'mkdir -p reports'
+              sh 'checkov -d . --output junitxml > reports/checkov-report.xml'
               junit skipPublishingChecks: true, testResults: 'reports/checkov-report.xml'
             } catch (err) {
                 junit skipPublishingChecks: true, testResults: 'reports/checkov-report.xml'
@@ -51,15 +51,15 @@ pipeline {
       }
     }
 
-    stage('Validate TF') {
-      input {
-        message "Do you want to apply this Plan?"
-        ok "Apply Plan"
-      }
-      steps {
-        echo 'Plan Accepted'
-      }
-    }
+        stage('Validate TF') {
+          input {
+            message "Do you want to apply this Plan?"
+            ok "Apply Plan"
+          }
+          steps {
+            echo 'Plan Accepted'
+          }
+        }
 
     stage('Apply TF') {
       steps {
