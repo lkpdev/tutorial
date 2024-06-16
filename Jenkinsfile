@@ -31,7 +31,7 @@ pipeline {
       steps {
         sh '''
           ls -al
-          sed -i "s|/Users/user/.aws/credentials|/root/.aws/credentials|g" main.tf
+//           sed -i "s|/Users/user/.aws/credentials|/root/.aws/credentials|g" main.tf
           cat main.tf
           terraform init
               echo 'TF INIT complete'
