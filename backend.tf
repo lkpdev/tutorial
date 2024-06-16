@@ -7,6 +7,6 @@ terraform {
 #     assume_role = {
 #       role_arn       = "arn:aws:iam::381492019105:role/LptestS3BackendRole"
 #     }
-#     dynamodb_table = "lptest-s3-backend"
+    dynamodb_table = "lptest-s3-backend"
   }
 }
