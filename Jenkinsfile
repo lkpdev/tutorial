@@ -127,7 +127,7 @@ pipeline {
     stage('Destroy TF') {
       steps {
         sh '''
-          terraform destroy -var -auto-approve
+          terraform destroy -auto-approve
         '''
       }
     }
