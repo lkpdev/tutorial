@@ -6,6 +6,15 @@ pipeline {
   }
 
   stages {
+    stage('Install Checkov') {
+      steps {
+        script {
+          sh "sudo pip install checkov"
+          def checkovPath = sh(script: 'pip show checkov | grep "Location" | cut -d " " -f 2', returnStdout: true).trim()
+          env.PATH = "${checkovPath}:${env.PATH}"
+        }
+      }
+    }
     stage('Init TF') {
       steps {
         sh '''
@@ -14,6 +23,23 @@ pipeline {
           cat main.tf
           terraform init
         '''
+      }
+    }
+
+    stage('checkov scan ') {
+      steps {
+        catchError(buildResult: 'SUCCESS') {
+          script {
+            try {
+              sh 'sudo mkdir -p reports'
+              sh 'sudo checkov -d . --output junitxml > reports/checkov-report.xml'
+              junit skipPublishingChecks: true, testResults: 'reports/checkov-report.xml'
+            } catch (err) {
+                junit skipPublishingChecks: true, testResults: 'reports/checkov-report.xml'
+                throw err
+            }
+          }
+        }
       }
     }
 
