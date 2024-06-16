@@ -2,7 +2,20 @@ pipeline {
   agent any
   environment {
     TF_IN_AUTOMATION = 'true'
-    AWS_SHARED_CREDENTIALS_FILE='/root/.aws/credentials'
+//     AWS_SHARED_CREDENTIALS_FILE='/root/.aws/credentials'
+  }
+
+  stages {
+    stage('Vault') {
+      steps {
+        script {
+          withVault(configuration: [disableChildPoliciesOverride: false, skipSslVerification: true, timeout: 60, vaultCredentialId: 'terraform-role', vaultUrl: 'http://ec2-54-234-126-189.compute-1.amazonaws.com:8200'],vaultSecrets: [[path: 'terraform/aws/awsaccesskey', secretValues: [[vaultKey: 'access_key']]],[path: 'terraform/aws/awssecretkey', secretValues: [[vaultKey: 'secret_key']]],[path: 'terraform/aws/sshkey', secretValues: [[vaultKey: 'public_key']]]]) {
+//             sh 'git pull origin main'
+//             sh 'terraform init && terraform apply -var "access_key=$access_key" -var "secret_key=$secret_key" -var "public_key=$public_key" --auto-approve'
+          }
+        }
+      }
+    }
   }
 
   stages {
@@ -22,6 +35,7 @@ pipeline {
           sed -i "s|/Users/user/.aws/credentials|/root/.aws/credentials|g" main.tf
           cat main.tf
           terraform init
+              echo 'TF INIT complete'
         '''
       }
     }
@@ -46,7 +60,7 @@ pipeline {
     stage('Plan TF') {
       steps {
         sh '''
-          terraform plan
+          terraform plan -var "access_key=$access_key" -var "secret_key=$secret_key" -var "public_key=$public_key" --auto-approve
         '''
       }
     }
@@ -64,7 +78,7 @@ pipeline {
     stage('Apply TF') {
       steps {
         sh '''
-          terraform apply -auto-approve
+          terraform apply -var "access_key=$access_key" -var "secret_key=$secret_key" -var "public_key=$public_key" -auto-approve
         '''
       }
     }
@@ -115,7 +129,7 @@ pipeline {
     stage('Destroy TF') {
       steps {
         sh '''
-          terraform destroy -auto-approve
+          terraform destroy -var "access_key=$access_key" -var "secret_key=$secret_key" -var "public_key=$public_key" -auto-approve
         '''
       }
     }
