@@ -59,7 +59,7 @@ pipeline {
     stage('Plan TF') {
       steps {
         sh '''
-          terraform plan -var "access_key=${env.access_key}" -var "secret_key=${env.secret_key}" -var "public_key=${env.public_key}"
+          terraform plan
         '''
       }
     }
