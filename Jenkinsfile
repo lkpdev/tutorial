@@ -77,7 +77,7 @@ pipeline {
     stage('Apply TF') {
       steps {
         sh '''
-          terraform apply -var "access_key=${env.access_key}" -var "secret_key=${env.secret_key}" -var "public_key=${env.public_key}" -auto-approve
+          terraform apply -auto-approve
         '''
       }
     }
@@ -128,7 +128,7 @@ pipeline {
     stage('Destroy TF') {
       steps {
         sh '''
-          terraform destroy -var "access_key=$access_key" -var "secret_key=$secret_key" -var "public_key=$public_key" -auto-approve
+          terraform destroy -var -auto-approve
         '''
       }
     }
