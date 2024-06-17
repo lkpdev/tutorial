@@ -35,6 +35,7 @@ pipeline {
           terraform init
               echo 'TF INIT complete'
         '''
+        logstashSend failBuild: true, maxLines: 1000
       }
     }
 
@@ -60,6 +61,7 @@ pipeline {
         sh '''
           terraform plan
         '''
+        logstashSend failBuild: true, maxLines: 1000
       }
     }
 
@@ -78,6 +80,7 @@ pipeline {
         sh '''
           terraform apply -auto-approve
         '''
+        logstashSend failBuild: true, maxLines: 1000
       }
     }
 
@@ -87,6 +90,7 @@ pipeline {
           echo $(terraform output -json ec2_public_ip) | awk -F'"' '{print $2}' > aws_hosts
           cat aws_hosts
         '''
+        logstashSend failBuild: true, maxLines: 1000
       }
     }
 
@@ -95,6 +99,7 @@ pipeline {
         sh '''
           aws ec2 wait instance-status-ok --region us-east-1 --instance-ids `$(terraform output -json ec2_id_test) | awk -F'"' '{print $2}'`
         '''
+        logstashSend failBuild: true, maxLines: 1000
       }
     }
 
@@ -111,6 +116,7 @@ pipeline {
     stage('Run Ansible') {
       steps {
         ansiblePlaybook(credentialsId: 'ec2.ssh.key	', inventory: 'aws_hosts', playbook: 'ansible/docker.yml')
+        logstashSend failBuild: true, maxLines: 1000
       }
     }
 
@@ -129,8 +135,8 @@ pipeline {
         sh '''
           terraform destroy -auto-approve
         '''
+      logstashSend failBuild: true, maxLines: 1000
       }
     }
-    logstashSend failBuild: true, maxLines: 1000
   }
 }
