@@ -1,9 +1,3 @@
-provider "aws" {
-  profile = "default"
-  region                  = var.region
-#   shared_credentials_file = "~/.aws/credentials"
-}
-
 #-----------network module-----------------
 module "network" {
   source       = "./modules/network"

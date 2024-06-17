@@ -2,9 +2,7 @@ pipeline {
   agent any
   environment {
     TF_IN_AUTOMATION = 'true'
-//     AWS_SHARED_CREDENTIALS_FILE='/root/.aws/credentials'
   }
-
   stages {
     stage('Vulnerability Scan - Docker Trivy') {
            steps {
@@ -21,7 +19,6 @@ pipeline {
             sh 'echo access_key=$access_key'
             sh 'echo secret_key=$secret_key'
             sh 'echo public_key=$public_key'
-//                 sh 'terraform init && terraform apply -var "access_key=$access_key" -var "secret_key=$secret_key" -var "public_key=$public_key" --auto-approve'
           }
         }
       }
